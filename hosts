@@ -1,0 +1,4 @@
+[master_nodes]
+node1 ansible_host=10.45.253.24 ansible_user=root become=true
+node2 ansible_host=10.45.253.68 ansible_user=root become=true
+node3 ansible_host=10.45.253.193 ansible_user=root become=true
