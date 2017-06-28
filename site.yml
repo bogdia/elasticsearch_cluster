@@ -2,46 +2,50 @@
   roles:
     - { role: elasticsearch, es_instance_name: "node1", es_heap_size: "1g",
     es_config: {
+        # discovery.zen.ping.multicast.enabled: false,
         cluster.name: "test-cluster",
-        discovery.zen.ping.unicast.hosts: "elastic02:9300",
+        discovery.zen.ping.unicast.hosts: "node01, node02, node03",
+        network.host: "_eth1_, _local_",
         http.port: 9200,
         transport.tcp.port: 9300,
         node.data: false,
         node.master: true,
         bootstrap.memory_lock: false,
+        #because kernel is old
+        bootstrap.system_call_filter: false,
         }
     }
   vars:
     es_scripts: false
     es_templates: false
     es_version_lock: false
-    es_major_version: "5.1"
-    es_version: "5.1.1"
     ansible_user: root
    # es_plugins:
    #  - plugin: ingest-geoip
 
 
 
-- hosts: data_nodes
+- hosts: master_data_nodes
   roles:
     - { role: elasticsearch, es_instance_name: "node1", es_data_dirs: "/opt/elasticsearch", 
     es_config: {
-        discovery.zen.ping.unicast.hosts: "elastic02:9300",
+        # discovery.zen.ping.multicast.enabled: false,
+        discovery.zen.ping.unicast.hosts: "node01, node02, node03",
+        network.host: "_eth1_, _local_",
         http.port: 9200,
         transport.tcp.port: 9300,
         node.data: true,
-        node.master: false,
+        node.master: true,
         bootstrap.memory_lock: false,
-        cluster.name: "test-cluster"
+        cluster.name: "test-cluster",       
+        #because kernel is old
+        bootstrap.system_call_filter: false,
         } 
     }
   vars:
     es_scripts: false
     es_templates: false
     es_version_lock: false
-    es_major_version: "5.1"
-    es_version: "5.1.1"
     ansible_user: root
     es_api_port: 9200
     #es_plugins:
@@ -50,49 +54,25 @@
     
 - hosts: data_nodes
   roles:
-    - { role: elasticsearch, es_instance_name: "node2", es_api_port: 9201,
+    - { role: elasticsearch, es_instance_name: "node1", es_api_port: 9200,
     es_config: {
-        discovery.zen.ping.unicast.hosts: "elastic02:9300",
-        http.port: 9201,
-        transport.tcp.port: 9301,
+        # discovery.zen.ping.multicast.enabled: false,
+        discovery.zen.ping.unicast.hosts: "node01, node02, node03",
+        network.host: "_eth2_, _local_",
+        http.port: 9200,
+        transport.tcp.port: 9300,
         node.data: true,
         node.master: false,
         bootstrap.memory_lock: false,
+        #because kernel is old
+        bootstrap.system_call_filter: false,
         cluster.name: "test-cluster",
         } 
     }
   vars:
     es_scripts: false
     es_templates: false
-    es_version_lock: false
-    es_major_version: "5.1"
-    es_version: "5.1.1"
-    es_api_port: 9201
-    ansible_user: root
-    #es_plugins:
-    #- plugin: ingest-geoip
-
-    
-- hosts: data_nodes
-  roles:
-    - { role: elasticsearch, es_instance_name: "node3", es_api_port: 9201,
-    es_config: {
-        discovery.zen.ping.unicast.hosts: "elastic02:9300",
-        http.port: 9201,
-        transport.tcp.port: 9301,
-        node.data: true,
-        node.master: false,
-        bootstrap.memory_lock: false,
-        cluster.name: "test-cluster",
-        } 
-    }
-  vars:
-    es_scripts: false
-    es_templates: false
-    es_version_lock: false
-    es_major_version: "5.1"
-    es_version: "5.1.1"
-    es_api_port: 9201
+    es_api_port: 9200
     ansible_user: root
     #es_plugins:
     #- plugin: ingest-geoip

@@ -1,0 +1,22 @@
+http://10.45.253.24:9200/_cluster/state?pretty
+
+cluster_nodes: https://www.elastic.co/guide/en/elasticsearch/reference/5.1/modules-network.html
+
+use env var in elastic cfg https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html 
+- fail to use it in ansible. TBD
+
+new changes in 5.2: https://www.elastic.co/guide/en/elasticsearch/reference/current/breaking-changes-5.2.html
+
+add the following line to config/logging.yml
+discovery.zen.ping.unicast: DEBUG
+
+This enables debugging logging in the relevant module
+
+
+bootstrap.system_call_filter to false
+
+
+add node0x to be identified
+- to /etc/hosts
+- as ip in discovery.zen.ping.unicast.hosts
+- what ip should be here? all? the masters only ?
